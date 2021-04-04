@@ -1,8 +1,12 @@
 var gameScreen = document.getElementById('gameScreen')
 var start = document.getElementById('startButton')
 var questionDiv = document.getElementById('questionCard')
+var alertDiv = document.getElementById('answerAlert')
+var finalScorePage = document.getElementById('finalScorePage')
+var finalScore = document.getElementById('finalScore')
 
 var correctCounter = 0
+var questionCounter = 0
 
 var questions = [
   {
@@ -30,7 +34,7 @@ var questions = [
     question: 'This is question number 2',
 
     answer1: {
-      correct: true,
+      correct: false,
       content: 'answer 1'
     },
 
@@ -43,7 +47,7 @@ var questions = [
       content: 'Answer 3'
     },
     answer4: {
-      correct: false,
+      correct: true,
       content: 'Answer 4'
     }
   },
@@ -60,11 +64,11 @@ var questions = [
       content: 'answer 2'
     },
     answer3: {
-      correct: true,
+      correct: false,
       content: 'answer 3'
     },
     answer4: {
-      correct: false,
+      correct: true,
       content: 'Answer 4'
     }
   }
@@ -76,21 +80,55 @@ start.addEventListener('click', () => {
   startGame()
 })
 
-function answerHandler(event) {
-  if (event.target.dataset.correct) {
-    correctCounter++
-    console.log(correctCounter)
+function answerAlert(truefalse) {
+  if (truefalse) {
+    alertDiv.innerHTML = `<hr/>
+    <h2>Correct!<h2/>`
+  } else {
+    alertDiv.innerHTML = `<hr/>
+    <h2>WRONG!<h2/>`
   }
 }
 
+function endGame() {
+  finalScore.innerHTML = `your final score is ${correctCounter}`
+  questionDiv.style.display = 'none'
+  alertDiv.style.display = 'none'
+  finalScorePage.style.display = 'block'
+}
+
+function answerHandler(event) {
+  var isCorrect = event.target.dataset.correct
+  if (questionCounter != questions.length) {
+    if (isCorrect === 'true') {
+      correctCounter++
+      questionCounter += 1
+      answerAlert(true)
+      showQuestion()
+    } else {
+      correctCounter--
+      questionCounter += 1
+      answerAlert(false)
+      showQuestion()
+    }
+  } else {
+    console.log('gameover')
+
+    endGame()
+  }
+
+  console.log(correctCounter)
+}
+
 function showQuestion() {
-  questionDiv.innerHTML = `<h2>${questions[0].question}</h2>
-  <button data-correct=${questions[0].answer1.correct} onclick=answerHandler(event)>${questions[0].answer1.content}</button>
-  <button data-correct=${questions[0].answer2.correct} onclick=answerHandler(event)>${questions[0].answer2.content}</button>
-  <button data-correct=${questions[0].answer3.correct} onclick=answerHandler(event)>${questions[0].answer3.content}</button>
-  <button data-correct=${questions[0].answer4.correct} onclick=answerHandler(event)>${questions[0].answer4.content}</button>`
+  questionDiv.innerHTML = `<h2>${questions[questionCounter].question}</h2>
+  <button data-correct=${questions[questionCounter].answer1.correct} onclick=answerHandler(event)>${questions[questionCounter].answer1.content}</button>
+  <button data-correct=${questions[questionCounter].answer2.correct} onclick=answerHandler(event)>${questions[questionCounter].answer2.content}</button>
+  <button data-correct=${questions[questionCounter].answer3.correct} onclick=answerHandler(event)>${questions[questionCounter].answer3.content}</button>
+  <button data-correct=${questions[questionCounter].answer4.correct} onclick=answerHandler(event)>${questions[questionCounter].answer4.content}</button>`
 }
 
 function startGame() {
+  finalScorePage.style.display = 'none'
   showQuestion()
 }
