@@ -12,21 +12,52 @@
       <h1>Levi Kane's Coding Quiz Challenge Extravaganza!</h1>
     </header>
     <main>
-      <section id="gameScreen">
+      <section id="homeScreenDiv">
         <h2>You ready to test that KNOWledge?!</h2>
         <button id="startButton">START</button>
       </section>
-      <section id="questionCard"></section>
-      <section id="answerAlert"></section>
-      <section id="finalScorePage">
+      <section id="questionCardDiv">
+        <h3 id="h3Question">Is question 1 is a question with an h3 tag?</h3>
+        <ol id="answerList">
+          <li>
+            <button id="answer1" onclick="answerHandler(event)">
+              Answer 1
+            </button>
+          </li>
+          <li>
+            <button id="answer2" onclick="answerHandler(event)">
+              Answer 2
+            </button>
+          </li>
+          <li>
+            <button id="answer3" onclick="answerHandler(event)">
+              Answer 3
+            </button>
+          </li>
+          <li>
+            <button id="answer4" onclick="answerHandler(event)">
+              Answer 4
+            </button>
+          </li>
+        </ol>
+      </section>
+      <div id="answerAlert">
+        <h4>Correct/Incorrect</h4>
+      </div>
+      <section id="finalScoreDiv">
         <h2>All done!</h2>
-        <p id="finalScore"></p>
-        <form>
-          <p id="score-input"></p>
+        <form id="finalScoreForm">
+          <p id="userFinalScore"></p>
           <label>Enter initials:</label>
-          <input id="initials-input" type="text" name="initials" />
-          <input type="submit" value="Enter" />
+          <input id="initialsInput" type="text" />
+          <input type="submit" id="formSubmissionBtn" />
         </form>
+      </section>
+      <section id="leaderboardDiv">
+        <h2>***Leaderboard***</h2>
+        <p id="userInitials">
+          user 1 <span id="userLeaderboardScore">user score</span>
+        </p>
       </section>
     </main>
     <script src="assets/js/script.js"></script>

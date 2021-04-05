@@ -1,14 +1,27 @@
-var gameScreen = document.getElementById('gameScreen')
-var start = document.getElementById('startButton')
-var questionDiv = document.getElementById('questionCard')
+console.log('hello')
+var homeScreenDiv = document.getElementById('homeScreenDiv')
+var startBtn = document.getElementById('startButton')
+var questionCardDiv = document.getElementById('questionCardDiv')
+var h3Question = document.getElementById('h3Question')
+var answerList = document.getElementById('answerList')
+var answer1 = document.getElementById('answer1')
+var answer2 = document.getElementById('answer2')
+var answer3 = document.getElementById('answer3')
+var answer4 = document.getElementById('answer4')
 var alertDiv = document.getElementById('answerAlert')
-var finalScorePage = document.getElementById('finalScorePage')
-var finalScore = document.getElementById('finalScore')
+var finalScoreDiv = document.getElementById('finalScoreDiv')
+var finalScoreForm = document.getElementById('finalSoreForm')
+var userFinalScore = document.getElementById('userFinalScore')
+var initialsInput = document.getElementById('initialsInput')
+var leaderboardDiv = document.getElementById('leaderboardDiv')
+var userInitials = document.getElementById('userInitials')
+var userLeaderboardScore = document.getElementById('userLeaderboardScore')
+var formSubmissionBtn = document.getElementById('formSubmissionBtn')
 
-var correctCounter = 0
-var questionCounter = 0
+questionCounter = 0
+correctCounter = 0
 
-var questions = [
+var questionsArray = [
   {
     question: 'Which coding language is most dynamic',
 
@@ -74,61 +87,99 @@ var questions = [
   }
 ]
 
-start.addEventListener('click', () => {
-  gameScreen.style.display = 'none'
-  console.log('disapear')
+function pageLoad() {
+  questionCardDiv.style.display = 'none'
+  alertDiv.style.display = 'none'
+  finalScoreDiv.style.display = 'none'
+  leaderboardDiv.style.display = 'none'
+}
+
+startBtn.addEventListener('click', () => {
+  homeScreenDiv.style.display = 'none'
   startGame()
 })
 
+function startGame() {
+  questionCardDiv.style.display = 'block'
+  loadQuestion()
+}
+
+pageLoad()
+
+function loadQuestion() {
+  h3Question.innerHTML = `${questionsArray[questionCounter].question}`
+  answer1.innerHTML = `${questionsArray[questionCounter].answer1.content}`
+  answer1.setAttribute(
+    'data-correct',
+    questionsArray[questionCounter].answer1.correct
+  )
+  answer2.innerHTML = `${questionsArray[questionCounter].answer2.content}`
+  answer2.setAttribute(
+    'data-correct',
+    questionsArray[questionCounter].answer2.correct
+  )
+
+  answer3.innerHTML = `${questionsArray[questionCounter].answer3.content}`
+  answer3.setAttribute(
+    'data-correct',
+    questionsArray[questionCounter].answer3.correct
+  )
+
+  answer4.innerHTML = `${questionsArray[questionCounter].answer4.content}`
+  answer4.setAttribute(
+    'data-correct',
+    questionsArray[questionCounter].answer4.correct
+  )
+}
+
 function answerAlert(truefalse) {
   if (truefalse) {
-    alertDiv.innerHTML = `<hr/>
-    <h2>Correct!<h2/>`
+    alertDiv.style.display = 'block'
+    alertDiv.textContent = 'CORRECT!'
   } else {
-    alertDiv.innerHTML = `<hr/>
-    <h2>WRONG!<h2/>`
+    alertDiv.textContent = 'WRONG!!'
+    alertDiv.style.display = 'block'
+  }
+}
+
+function answerHandler(event) {
+  var answerClicked = event.target.dataset.correct
+  if (questionCounter != questionsArray.length) {
+    if (answerClicked === 'true') {
+      console.log('clicked')
+      correctCounter++
+      answerAlert(true)
+      questionCounter += 1
+      loadQuestion()
+    } else if (answerClicked == 'false') {
+      correctCounter--
+      answerAlert(false)
+      questionCounter += 1
+      loadQuestion()
+    }
+  } else if (questionCounter == questionsArray.length + 1) {
+    console.log('gameover')
+    endGame()
   }
 }
 
 function endGame() {
-  finalScore.innerHTML = `your final score is ${correctCounter}`
-  questionDiv.style.display = 'none'
+  questionCardDiv.style.display = 'none'
   alertDiv.style.display = 'none'
-  finalScorePage.style.display = 'block'
+  finalScoreDiv.style.display = 'block'
+  userFinalScore.innerHTML = `Your score is ${correctCounter}`
 }
 
-function answerHandler(event) {
-  var isCorrect = event.target.dataset.correct
-  if (questionCounter != questions.length) {
-    if (isCorrect === 'true') {
-      correctCounter++
-      questionCounter += 1
-      answerAlert(true)
-      showQuestion()
-    } else {
-      correctCounter--
-      questionCounter += 1
-      answerAlert(false)
-      showQuestion()
-    }
-  } else {
-    console.log('gameover')
+formSubmissionBtn.addEventListener('click', (event) => {
+  event.preventDefault()
+  showLeaderBoard()
+})
 
-    endGame()
-  }
-
-  console.log(correctCounter)
-}
-
-function showQuestion() {
-  questionDiv.innerHTML = `<h2>${questions[questionCounter].question}</h2>
-  <button data-correct=${questions[questionCounter].answer1.correct} onclick=answerHandler(event)>${questions[questionCounter].answer1.content}</button>
-  <button data-correct=${questions[questionCounter].answer2.correct} onclick=answerHandler(event)>${questions[questionCounter].answer2.content}</button>
-  <button data-correct=${questions[questionCounter].answer3.correct} onclick=answerHandler(event)>${questions[questionCounter].answer3.content}</button>
-  <button data-correct=${questions[questionCounter].answer4.correct} onclick=answerHandler(event)>${questions[questionCounter].answer4.content}</button>`
-}
-
-function startGame() {
-  finalScorePage.style.display = 'none'
-  showQuestion()
+function showLeaderBoard() {
+  leaderboardDiv.style.display = 'block'
+  localStorage.setItem('initials', initialsInput.value)
+  userInitials.innerHTML = `${localStorage.getItem(
+    'initials'
+  )} ${correctCounter}`
+  console.log(userInitials)
 }
