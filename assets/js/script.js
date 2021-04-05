@@ -18,8 +18,9 @@ var userInitials = document.getElementById('userInitials')
 var userLeaderboardScore = document.getElementById('userLeaderboardScore')
 var formSubmissionBtn = document.getElementById('formSubmissionBtn')
 
-questionCounter = 0
-correctCounter = 0
+var questionCounter = 0
+var answerCounter = 0
+var correctCounter = 0
 
 var questionsArray = [
   {
@@ -130,6 +131,7 @@ function loadQuestion() {
     'data-correct',
     questionsArray[questionCounter].answer4.correct
   )
+  questionCounter += 1
 }
 
 function answerAlert(truefalse) {
@@ -144,22 +146,26 @@ function answerAlert(truefalse) {
 
 function answerHandler(event) {
   var answerClicked = event.target.dataset.correct
-  if (questionCounter != questionsArray.length) {
-    if (answerClicked === 'true') {
-      console.log('clicked')
-      correctCounter++
-      answerAlert(true)
-      questionCounter += 1
+  if (answerClicked === 'true') {
+    correctCounter++
+    answerCounter += 1
+    answerAlert(true)
+    console.log(answerCounter)
+    if (questionCounter != questionsArray.length) {
       loadQuestion()
-    } else if (answerClicked == 'false') {
-      correctCounter--
-      answerAlert(false)
-      questionCounter += 1
-      loadQuestion()
+    } else {
+      endGame()
     }
-  } else if (questionCounter == questionsArray.length + 1) {
-    console.log('gameover')
-    endGame()
+  } else if (answerClicked == 'false') {
+    correctCounter--
+    answerCounter += 1
+    answerAlert(false)
+    console.log(answerCounter)
+    if (questionCounter != questionsArray.length) {
+      loadQuestion()
+    } else {
+      endGame()
+    }
   }
 }
 
