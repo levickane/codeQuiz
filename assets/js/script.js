@@ -301,25 +301,25 @@ function storeLeaderboardScores() {
   localStorage.setItem('userInfo', JSON.stringify(leaderboardStorage))
 }
 
-function displayFinalPage() {
-  formSubmissionBtn.addEventListener('click', (event) => {
-    event.preventDefault()
-    formSubmissionBtn.style.display = 'none'
-    formSubmissionBtn.setAttribute('disabled', 'disabled')
-    leaderboardDiv.style.display = 'block'
-    storeLeaderboardScores()
-    renderLeaderboard()
-  })
-}
+// function displayFinalPage() {
+formSubmissionBtn.addEventListener('click', (event) => {
+  event.preventDefault()
+  formSubmissionBtn.style.display = 'none'
+  formSubmissionBtn.setAttribute('disabled', 'disabled')
+  leaderboardDiv.style.display = 'block'
+  storeLeaderboardScores()
+  renderLeaderboard()
+})
+// }
 
-function empty() {
-  formSubmissionBtn.addEventListener('click', (event) => {
-    if (initialsInput == '') {
-      event.preventDefault()
-    } else {
-      displayFinalPage()
-    }
-  })
-}
+// function empty() {
+//   formSubmissionBtn.addEventListener('click', (event) => {
+//     if (initialsInput == '') {
+//       event.preventDefault()
+//     } else {
+//       displayFinalPage()
+//     }
+//   })
+// }
 
 initLeaderboard()
