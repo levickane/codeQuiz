@@ -1,6 +1,6 @@
-console.log('hello')
 var homeScreenDiv = document.getElementById('homeScreenDiv')
 var startBtn = document.getElementById('startButton')
+var timerDiv = document.getElementById('timerDiv')
 var questionCardDiv = document.getElementById('questionCardDiv')
 var h3Question = document.getElementById('h3Question')
 var answerList = document.getElementById('answerList')
@@ -10,12 +10,10 @@ var answer3 = document.getElementById('answer3')
 var answer4 = document.getElementById('answer4')
 var alertDiv = document.getElementById('answerAlert')
 var finalScoreDiv = document.getElementById('finalScoreDiv')
-var finalScoreForm = document.getElementById('finalSoreForm')
 var userFinalScore = document.getElementById('userFinalScore')
 var initialsInput = document.getElementById('initialsInput')
 var leaderboardDiv = document.getElementById('leaderboardDiv')
-var userInitials = document.getElementById('userInitials')
-var userLeaderboardScore = document.getElementById('userLeaderboardScore')
+var leaderboardList = document.getElementById('leaderboardList')
 var formSubmissionBtn = document.getElementById('formSubmissionBtn')
 
 var questionCounter = 0
@@ -45,48 +43,128 @@ var questionsArray = [
     }
   },
   {
-    question: 'This is question number 2',
+    question: 'Which of the following is a datatype?',
 
     answer1: {
       correct: false,
-      content: 'answer 1'
+      content: 'mole'
     },
 
     answer2: {
       correct: false,
-      content: 'Answer 2'
+      content: 'math'
     },
     answer3: {
       correct: false,
-      content: 'Answer 3'
+      content: 'jewl'
     },
     answer4: {
       correct: true,
-      content: 'Answer 4'
+      content: 'boolean'
     }
   },
   {
-    question: 'Quesiton number 3 is here!',
+    question: 'What keyword do you use to set a variable?',
 
     answer1: {
-      correct: false,
-      content: 'answer1'
+      correct: true,
+      content: 'var'
     },
 
     answer2: {
       correct: false,
-      content: 'answer 2'
+      content: 'variable'
     },
     answer3: {
       correct: false,
-      content: 'answer 3'
+      content: 'x'
     },
     answer4: {
+      correct: false,
+      content: 'set'
+    }
+  },
+  {
+    question: 'Which of the following is NOT a coding language?',
+
+    answer1: {
+      correct: false,
+      content: 'JavaScript'
+    },
+
+    answer2: {
+      correct: false,
+      content: '.Net'
+    },
+    answer3: {
       correct: true,
-      content: 'Answer 4'
+      content: 'CoffeeScript'
+    },
+    answer4: {
+      correct: false,
+      content: 'CSS'
+    }
+  },
+  {
+    question: 'What are ternary functions for?',
+
+    answer1: {
+      correct: true,
+      content: 'shorthand if statements'
+    },
+
+    answer2: {
+      correct: false,
+      content: 'looping through 3 items'
+    },
+    answer3: {
+      correct: false,
+      content: 'a 3 tiered if state'
+    },
+    answer4: {
+      correct: false,
+      content: 'None of the above'
+    }
+  },
+  {
+    question: 'Coding involves a lot of.....',
+
+    answer1: {
+      correct: false,
+      content: 'memorization'
+    },
+
+    answer2: {
+      correct: true,
+      content: 'Googling'
+    },
+    answer3: {
+      correct: false,
+      content: 'nerdy smartness'
+    },
+    answer4: {
+      correct: false,
+      content: 'computer science college knowledge'
     }
   }
 ]
+var timeLeft = 15
+
+function countDown() {
+  var timeInterval = setInterval(function () {
+    timeLeft--
+    timerDiv.textContent = `${timeLeft} seconds left.`
+    if (timeLeft <= 0) {
+      clearInterval(timeInterval)
+      timerDiv.textContent = 'YOU LOST BREAUX!'
+      endGame()
+    } else if (answerCounter == questionsArray.length) {
+      clearInterval(timeInterval)
+      timerDiv.textContent = ''
+      endGame()
+    }
+  }, 1000)
+}
 
 function pageLoad() {
   questionCardDiv.style.display = 'none'
@@ -98,6 +176,7 @@ function pageLoad() {
 startBtn.addEventListener('click', () => {
   homeScreenDiv.style.display = 'none'
   startGame()
+  countDown()
 })
 
 function startGame() {
@@ -150,7 +229,6 @@ function answerHandler(event) {
     correctCounter++
     answerCounter += 1
     answerAlert(true)
-    console.log(answerCounter)
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
@@ -158,9 +236,9 @@ function answerHandler(event) {
     }
   } else if (answerClicked == 'false') {
     correctCounter--
+    timeLeft -= 2
     answerCounter += 1
     answerAlert(false)
-    console.log(answerCounter)
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
@@ -176,16 +254,72 @@ function endGame() {
   userFinalScore.innerHTML = `Your score is ${correctCounter}`
 }
 
-formSubmissionBtn.addEventListener('click', (event) => {
-  event.preventDefault()
-  showLeaderBoard()
-})
+// LOCAL STORAGE***************
+var leaderboardStorage = []
 
-function showLeaderBoard() {
-  leaderboardDiv.style.display = 'block'
-  localStorage.setItem('initials', initialsInput.value)
-  userInitials.innerHTML = `${localStorage.getItem(
-    'initials'
-  )} ${correctCounter}`
-  console.log(userInitials)
+function renderLeaderboard() {
+  timerDiv.textContent = ''
+  leaderboardList.innerHTML = ''
+  for (let i = 0; i < leaderboardStorage.length; i++) {
+    leaderboardScore = leaderboardStorage[i]
+    var li = document.createElement('li')
+    li.textContent = `${leaderboardScore.username} with ${leaderboardScore.score} points`
+    leaderboardList.appendChild(li)
+  }
+  //Play Again handlers
+  var playAgainBtn = document.createElement('button')
+  playAgainBtn.textContent = 'Play Again'
+  leaderboardDiv.appendChild(playAgainBtn)
+  playAgainBtn.addEventListener('click', () => {
+    location.reload()
+  })
+  //Clear the scoreboard
+  var clearScoresBtn = document.createElement('button')
+  clearScoresBtn.textContent = 'Clear Leaderboard'
+  leaderboardDiv.appendChild(clearScoresBtn)
+  clearScoresBtn.addEventListener('click', () => {
+    localStorage.clear()
+    leaderboardList.innerHTML = ''
+  })
 }
+
+function initLeaderboard() {
+  var storedLeaderboard = JSON.parse(localStorage.getItem('userInfo'))
+  console.log(storedLeaderboard)
+  console.log(storedLeaderboard)
+  if (storedLeaderboard !== null) {
+    leaderboardStorage = storedLeaderboard
+  }
+}
+
+function storeLeaderboardScores() {
+  userData = {
+    username: initialsInput.value,
+    score: correctCounter
+  }
+  leaderboardStorage.push(userData)
+  localStorage.setItem('userInfo', JSON.stringify(leaderboardStorage))
+}
+
+function displayFinalPage() {
+  formSubmissionBtn.addEventListener('click', (event) => {
+    event.preventDefault()
+    formSubmissionBtn.style.display = 'none'
+    formSubmissionBtn.setAttribute('disabled', 'disabled')
+    leaderboardDiv.style.display = 'block'
+    storeLeaderboardScores()
+    renderLeaderboard()
+  })
+}
+
+function empty() {
+  formSubmissionBtn.addEventListener('click', (event) => {
+    if (initialsInput == '') {
+      event.preventDefault()
+    } else {
+      displayFinalPage()
+    }
+  })
+}
+
+initLeaderboard()
