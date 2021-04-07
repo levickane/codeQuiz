@@ -1,1 +1,69 @@
+body {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+button {
+  font-size: 20px;
+}
+#formSubmissionBtn {
+  font-size: 20px;
+}
 
+#startButtonDiv {
+  display: flex;
+  justify-content: center;
+}
+
+#questionCardDiv {
+  display: flex;
+}
+#answerList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  padding: 0;
+}
+
+#finalScoreDiv h2 {
+  display: flex;
+  justify-content: center;
+}
+#leaderboardList {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+#leaderboardDiv h2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrong {
+  background-color: red;
+  font-size: 30px;
+  border-radius: 10px;
+  padding: 5px 50px;
+}
+.right {
+  background-color: green;
+  font-size: 30px;
+  border-radius: 10px;
+  padding: 5px 50px;
+}

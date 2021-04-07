@@ -148,7 +148,7 @@ var questionsArray = [
     }
   }
 ]
-var timeLeft = 15
+var timeLeft = 200
 
 function countDown() {
   var timeInterval = setInterval(function () {
@@ -240,7 +240,7 @@ function answerHandler(event) {
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
-      endGame()
+      setTimeout(endGame, 2000)
     }
   } else if (answerClicked == 'false') {
     correctCounter--
@@ -252,7 +252,7 @@ function answerHandler(event) {
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
-      endGame()
+      setTimeout(endGame, 2000)
     }
   }
 }
