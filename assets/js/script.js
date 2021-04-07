@@ -10,6 +10,7 @@ var answer3 = document.getElementById('answer3')
 var answer4 = document.getElementById('answer4')
 var alertDiv = document.getElementById('answerAlert')
 var finalScoreDiv = document.getElementById('finalScoreDiv')
+var finalScoreForm = document.getElementById('finalScoreForm')
 var userFinalScore = document.getElementById('userFinalScore')
 var initialsInput = document.getElementById('initialsInput')
 var leaderboardDiv = document.getElementById('leaderboardDiv')
@@ -119,7 +120,7 @@ var questionsArray = [
     },
     answer3: {
       correct: false,
-      content: 'a 3 tiered if state'
+      content: 'a 3 tiered if statement'
     },
     answer4: {
       correct: false,
@@ -148,7 +149,7 @@ var questionsArray = [
     }
   }
 ]
-var timeLeft = 200
+var timeLeft = 20
 
 function countDown() {
   var timeInterval = setInterval(function () {
@@ -235,24 +236,24 @@ function answerHandler(event) {
     correctCounter++
     answerCounter += 1
     answerAlert(true)
-    setTimeout(removeAlert, 1000)
+    setTimeout(removeAlert, 500)
 
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
-      setTimeout(endGame, 2000)
+      setTimeout(endGame, 1000)
     }
   } else if (answerClicked == 'false') {
     correctCounter--
     timeLeft -= 2
     answerCounter += 1
     answerAlert(false)
-    setTimeout(removeAlert, 1000)
+    setTimeout(removeAlert, 500)
 
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
-      setTimeout(endGame, 2000)
+      setTimeout(endGame, 1000)
     }
   }
 }
@@ -313,8 +314,9 @@ function storeLeaderboardScores() {
 
 formSubmissionBtn.addEventListener('click', (event) => {
   event.preventDefault()
-  formSubmissionBtn.style.display = 'none'
-  formSubmissionBtn.setAttribute('disabled', 'disabled')
+  finalScoreDiv.style.display = 'none'
+  //   formSubmissionBtn.style.display = 'none'
+  //   formSubmissionBtn.setAttribute('disabled', 'disabled')
   leaderboardDiv.style.display = 'block'
   storeLeaderboardScores()
   renderLeaderboard()
