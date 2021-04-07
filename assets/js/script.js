@@ -213,12 +213,18 @@ function loadQuestion() {
   questionCounter += 1
 }
 
+//alerts if you got it right or not and then removes it from the screen
+function removeAlert() {
+  alertDiv.style.display = 'none'
+}
 function answerAlert(truefalse) {
   if (truefalse) {
     alertDiv.style.display = 'block'
+    alertDiv.setAttribute('class', 'right')
     alertDiv.textContent = 'CORRECT!'
-  } else {
+  } else if (!truefalse) {
     alertDiv.textContent = 'WRONG!!'
+    alertDiv.setAttribute('class', 'wrong')
     alertDiv.style.display = 'block'
   }
 }
@@ -229,6 +235,8 @@ function answerHandler(event) {
     correctCounter++
     answerCounter += 1
     answerAlert(true)
+    setTimeout(removeAlert, 1000)
+
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
@@ -239,6 +247,8 @@ function answerHandler(event) {
     timeLeft -= 2
     answerCounter += 1
     answerAlert(false)
+    setTimeout(removeAlert, 1000)
+
     if (questionCounter != questionsArray.length) {
       loadQuestion()
     } else {
@@ -301,7 +311,6 @@ function storeLeaderboardScores() {
   localStorage.setItem('userInfo', JSON.stringify(leaderboardStorage))
 }
 
-// function displayFinalPage() {
 formSubmissionBtn.addEventListener('click', (event) => {
   event.preventDefault()
   formSubmissionBtn.style.display = 'none'
@@ -310,16 +319,5 @@ formSubmissionBtn.addEventListener('click', (event) => {
   storeLeaderboardScores()
   renderLeaderboard()
 })
-// }
-
-// function empty() {
-//   formSubmissionBtn.addEventListener('click', (event) => {
-//     if (initialsInput == '') {
-//       event.preventDefault()
-//     } else {
-//       displayFinalPage()
-//     }
-//   })
-// }
 
 initLeaderboard()
